@@ -5,8 +5,8 @@
 // Ejercicio 1
 
 bool esImagenValida(const imagen& img) {
-	bool resp = false;
-	// TODO --> cuerpo de funcion
+    bool resp = esImgValida(img);
+
     return resp;
 }
 
