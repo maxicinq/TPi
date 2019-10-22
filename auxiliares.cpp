@@ -51,25 +51,15 @@ bool esBinaria(const imagen &A){
 }
 
 bool activado(const pixel &p, const imagen &A){
-    return A[p[0]][p[1]] == 1;
+    return (A[p[0]][p[1]] == 1);
 }
 
 bool pixelEnRango(const pixel &p, const imagen &A){
-    return (p[0] >= 0 && p[0] < A.size() && p[1] >= 0 && p[1] < A.size());
+    return (p[0] >= 0 && p[0] < A.size() && p[1] >= 0 && p[1] < A[0].size());
 }
 
 bool pixelValidoEncendido(const pixel &p, const imagen &A){
-
-}
-
-bool estanConectados(const pixel &p, const pixel &q, const imagen &A, const int &k){
-    bool result = false;
-
-    if (k == 4 && pixelEnRango(p,A) && pixelEnRango(q,A) && activado(p,A) && activado(q,A)){
-        result = abs(p[0] - q[0]) + abs(p[1] - q[1]) <= 1;
-    } else if (k == 8 && pixelEnRango(p,A) && pixelEnRango(q,A) && activado(p,A) && activado(q,A)){
-        result = max(abs(p[0] - q[0]), abs(p[1] - q[1])) <= 1;
-    }
+    return (pixelEnRango(p, A) && activado(p, A));
 }
 
 bool pertenece(const pixel &p, const sqPixel &s){
@@ -96,17 +86,28 @@ sqPixel obtenerAdyacentes(const pixel &p, const imagen &A, const int &k){
 
 bool estanConectados(const imagen &A, const pixel &p, const pixel &q, const int &k){
     sqPixel obtenidos = {p};
-    sqPixel obtenidosAnt = {p};
+    sqPixel obtenidosAnt = {};
     sqPixel adyacentes = {};
     sqPixel tmp = {};
     sqPixel tmpAnt = {p};
+    bool result = false;
 
-    for (int i = 0; i < tmpAnt.size(); i++) {
-        adyacentes = obtenerAdyacentes(tmpAnt[i], A, k);
-        for (int j = 0; j < adyacentes.size(); ++j) {
-            if(pixelValidoEncendido(adyacentes[i]) && !pertenece(adyacentes[j], obtenidos)){
-                tmp.push_back(adyacentes[i]);
+    while (!result && obtenidos != obtenidosAnt){
+        for (int i = 0; i < tmpAnt.size(); i++) {
+            adyacentes = obtenerAdyacentes(tmpAnt[i], A, k);
+            for (int j = 0; j < adyacentes.size(); j++) {
+                if (pixelValidoEncendido(adyacentes[j], A) && !pertenece(adyacentes[j], obtenidos)){
+                    tmp.push_back(adyacentes[j]);
+                }
             }
         }
+        obtenidosAnt = obtenidos;
+        for (int l = 0; l < tmp.size(); l++) {
+            obtenidos.push_back(tmp[l]);
+        }
+        tmpAnt = tmp;
+        tmp.clear();
+        result = pertenece(q, obtenidos);
     }
+    return result;
 }
