@@ -22,7 +22,6 @@ bool sonPixelesConectados(const imagen& img, const pixel& p, const pixel& q, int
 
 float devolverPromedioAreas(const imagen &A, int k){
 	float prom = -1.0;
-
 	prom = calcularPromedioDeAreas(A,k);
 
     return prom;
@@ -32,7 +31,7 @@ float devolverPromedioAreas(const imagen &A, int k){
 
 sqPixel calcularContorno(const imagen &A, int k){
     sqPixel edges = {{}};
-	// TODO --> cuerpo de funcion
+
     return edges;
 }
 

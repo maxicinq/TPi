@@ -73,13 +73,29 @@ bool pertenece(const pixel &p, const sqPixel &s){
     return result;
 }
 
-bool pertenece(const sqPixel &p, const vector<sqPixel> &s){
-    bool result = false;
+int apariciones(const pixel &p, const sqPixel &s){
+    int contador = 0;
 
     for (int i = 0; i < s.size(); i++) {
-        if (s[i] == p){
-            result = true;
+        if (p == s[i]){
+            contador++;
         }
+    }
+    return contador;
+}
+
+bool contenida(const sqPixel &sq, const vector<sqPixel> &s){
+    bool result = false;
+    int contador = 0;
+
+    for (int j = 0; j < s.size() && !result; j++) {
+        for (int i = 0; i < sq.size(); i++) {
+            if (apariciones(sq[i], sq) == apariciones(sq[i], s[j])){
+                contador++;
+            }
+        }
+        result = contador == sq.size();
+        contador = 0;
     }
     return result;
 }
@@ -140,7 +156,8 @@ sqPixel obtenerRegion(const imagen &A, const pixel &p, const int &k){
         for (int i = 0; i < tmpAnt.size(); i++) {
             adyacentes = obtenerAdyacentes(tmpAnt[i], A, k);
             for (int j = 0; j < adyacentes.size(); j++) {
-                if (pixelValidoEncendido(adyacentes[j], A) && !pertenece(adyacentes[j], obtenidos)){
+                if (pixelValidoEncendido(adyacentes[j], A)
+                && !pertenece(adyacentes[j], obtenidos) && !pertenece(adyacentes[j], tmp)){
                     tmp.push_back(adyacentes[j]);
                 }
             }
@@ -164,7 +181,7 @@ vector<sqPixel> todasLasRegiones(const imagen &A, const int &k){
     for (int i = 0; i < A.size(); i++) {
         for (int j = 0; j < A[0].size(); j++) {
             regionActual = obtenerRegion(A, {i,j}, k);
-            if (!pertenece(regionActual, regiones) && !regionActual.empty()){
+            if (!contenida(regionActual, regiones) && !regionActual.empty()){
                 regiones.push_back(regionActual);
             }
         }
