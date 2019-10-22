@@ -73,6 +73,17 @@ bool pertenece(const pixel &p, const sqPixel &s){
     return result;
 }
 
+bool pertenece(const sqPixel &p, const vector<sqPixel> &s){
+    bool result = false;
+
+    for (int i = 0; i < s.size(); i++) {
+        if (s[i] == p){
+            result = true;
+        }
+    }
+    return result;
+}
+
 sqPixel obtenerAdyacentes(const pixel &p, const imagen &A, const int &k){
     sqPixel result = {};
     if (k == 4){
@@ -85,7 +96,10 @@ sqPixel obtenerAdyacentes(const pixel &p, const imagen &A, const int &k){
 }
 
 bool estanConectados(const imagen &A, const pixel &p, const pixel &q, const int &k){
-    sqPixel obtenidos = {p};
+    sqPixel obtenidos = {};
+    if (pixelValidoEncendido(p,A)){
+        obtenidos = {p};
+    }
     sqPixel obtenidosAnt = {};
     sqPixel adyacentes = {};
     sqPixel tmp = {};
@@ -110,4 +124,67 @@ bool estanConectados(const imagen &A, const pixel &p, const pixel &q, const int 
         result = pertenece(q, obtenidos);
     }
     return result;
+}
+
+sqPixel obtenerRegion(const imagen &A, const pixel &p, const int &k){
+    sqPixel obtenidos = {};
+    if (pixelValidoEncendido(p,A)){
+        obtenidos = {p};
+    }
+    sqPixel obtenidosAnt = {};
+    sqPixel adyacentes = {};
+    sqPixel tmp = {};
+    sqPixel tmpAnt = {p};
+
+    while (obtenidos != obtenidosAnt){
+        for (int i = 0; i < tmpAnt.size(); i++) {
+            adyacentes = obtenerAdyacentes(tmpAnt[i], A, k);
+            for (int j = 0; j < adyacentes.size(); j++) {
+                if (pixelValidoEncendido(adyacentes[j], A) && !pertenece(adyacentes[j], obtenidos)){
+                    tmp.push_back(adyacentes[j]);
+                }
+            }
+        }
+        obtenidosAnt = obtenidos;
+        for (int l = 0; l < tmp.size(); l++) {
+            obtenidos.push_back(tmp[l]);
+        }
+        tmpAnt = tmp;
+        tmp.clear();
+    }
+    return obtenidos;
+}
+
+
+
+vector<sqPixel> todasLasRegiones(const imagen &A, const int &k){
+    vector<sqPixel> regiones = {};
+    sqPixel regionActual = {};
+
+    for (int i = 0; i < A.size(); i++) {
+        for (int j = 0; j < A[0].size(); j++) {
+            regionActual = obtenerRegion(A, {i,j}, k);
+            if (!pertenece(regionActual, regiones) && !regionActual.empty()){
+                regiones.push_back(regionActual);
+            }
+        }
+    }
+    return regiones;
+}
+
+float calcularPromedioDeAreas(const imagen &A, const int k){
+    float prom = 0.0;
+    vector<sqPixel> listaRegiones = todasLasRegiones(A,k);
+    float sumaPixelesDeRegion = 0.0;
+    int sumaRegiones = listaRegiones.size();
+
+    for (int i = 0; i < listaRegiones.size(); i++) {
+        sumaPixelesDeRegion += listaRegiones[i].size();
+    }
+
+    if (sumaRegiones != 0){
+        prom = sumaPixelesDeRegion / sumaRegiones;
+    }
+
+    return prom;
 }

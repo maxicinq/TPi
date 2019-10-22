@@ -14,3 +14,6 @@ bool vacia(const imagen &A);
 bool esBinaria(const imagen &A);
 
 bool estanConectados(const imagen &A, const pixel &p, const pixel &q, const int &k);
+
+float calcularPromedioDeAreas(const imagen &A, const int k);
+

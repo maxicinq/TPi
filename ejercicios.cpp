@@ -22,7 +22,9 @@ bool sonPixelesConectados(const imagen& img, const pixel& p, const pixel& q, int
 
 float devolverPromedioAreas(const imagen &A, int k){
 	float prom = -1.0;
-	// TODO --> cuerpo de funcion
+
+	prom = calcularPromedioDeAreas(A,k);
+
     return prom;
 }
 
