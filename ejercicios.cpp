@@ -30,7 +30,15 @@ float devolverPromedioAreas(const imagen &A, int k){
 // Ejercicio 4
 
 sqPixel calcularContorno(const imagen &A, int k){
-    sqPixel edges = {{}};
+    sqPixel edges = {};
+
+    for (int i = 0; i < A.size(); i++) {
+        for (int j = 0; j < A.size(); j++) {
+            if (esPixelContorno({i,j},A,k)){
+                edges.push_back({i,j});
+            }
+        }
+    }
 
     return edges;
 }

@@ -17,3 +17,5 @@ bool estanConectados(const imagen &A, const pixel &p, const pixel &q, const int 
 
 float calcularPromedioDeAreas(const imagen &A, const int k);
 
+bool esPixelContorno(const pixel &p, const imagen &A, const int &k);
+

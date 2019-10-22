@@ -172,9 +172,7 @@ sqPixel obtenerRegion(const imagen &A, const pixel &p, const int &k){
     return obtenidos;
 }
 
-
-
-vector<sqPixel> todasLasRegiones(const imagen &A, const int &k){
+vector<sqPixel> obtenerTodasLasRegiones(const imagen &A, const int &k){
     vector<sqPixel> regiones = {};
     sqPixel regionActual = {};
 
@@ -191,7 +189,7 @@ vector<sqPixel> todasLasRegiones(const imagen &A, const int &k){
 
 float calcularPromedioDeAreas(const imagen &A, const int k){
     float prom = 0.0;
-    vector<sqPixel> listaRegiones = todasLasRegiones(A,k);
+    vector<sqPixel> listaRegiones = obtenerTodasLasRegiones(A, k);
     float sumaPixelesDeRegion = 0.0;
     int sumaRegiones = listaRegiones.size();
 
@@ -204,4 +202,32 @@ float calcularPromedioDeAreas(const imagen &A, const int k){
     }
 
     return prom;
+}
+
+bool tocaConBackground(const pixel &p, const imagen &A, const int &k){
+    sqPixel adyacentes = obtenerAdyacentes(p,A,k);
+    bool result = false;
+
+    for (int i = 0; i < adyacentes.size(); i++) {
+        if (pixelValidoEncendido(p,A) && pixelEnRango(adyacentes[i],A) && !activado(adyacentes[i],A)){
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool estaEnBorde(const pixel &p, const imagen &A, const int &k){
+    sqPixel adyacentes = obtenerAdyacentes(p,A,k);
+    bool result = false;
+
+    for (int i = 0; i < adyacentes.size(); i++) {
+        if (pixelValidoEncendido(p,A) && !pixelEnRango(adyacentes[i],A)){
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool esPixelContorno(const pixel &p, const imagen &A, const int &k){
+    return (tocaConBackground(p,A,k) || estaEnBorde(p,A,k));
 }
