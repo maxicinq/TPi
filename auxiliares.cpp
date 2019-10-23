@@ -231,3 +231,73 @@ bool estaEnBorde(const pixel &p, const imagen &A, const int &k){
 bool esPixelContorno(const pixel &p, const imagen &A, const int &k){
     return (tocaConBackground(p,A,k) || estaEnBorde(p,A,k));
 }
+
+sqPixel estructuranteCentradoEn(const imagen &A, const imagen &B, pixel p){
+    vector<pixel> opciones;
+    for(int i=0; i<A.size(); i++){
+        for(int j=0; j<A[0].size(); j++){
+            if(p[0]-(B.size()-1)/2 <= i && i <= p[0]+(B.size()-1)/2 && p[1]-(B.size()-1)/2 <= j && j <= p[1]+(B.size()-1)/2){
+                opciones.push_back({i,j});
+            }
+        }
+    }
+    sqPixel res;
+    int n = opciones[0][0];
+    int m = opciones[0][1];
+    for(int k=0; k<opciones.size(); k++){
+        if(activado({opciones[k][0]-n,opciones[k][1]-m},B)){
+            res.push_back(opciones[k]);
+        }
+    }
+    return res;
+}
+
+bool esPixelDeDilatacion(const imagen &A, const imagen &B, pixel p){
+    sqPixel est = estructuranteCentradoEn(A,B,p);
+    bool res = false;
+    int i = 0;
+    while(i<est.size() && !res){
+        if(activado(est[i],A)){
+            res = true;
+        }
+        i++;
+    }
+    return res;
+}
+
+imagen dilatar(const imagen &A, const imagen &B){
+    imagen D = A;
+    for(int i=0; i < A.size(); i++){
+        for(int j=0; j < A[0].size(); j++){
+            if(esPixelDeDilatacion(A,B,{i,j})){
+                D[i][j] = 1;
+            }
+        }
+    }
+    return D;
+}
+
+bool esPixelDeErosion(const imagen &A, const imagen &B, const pixel &p){
+    sqPixel est = estructuranteCentradoEn(A,B,p);
+    bool res = true;
+    int i = 0;
+    while(i<est.size() && res){
+        if(!activado(est[i],A)){
+            res = false;
+        }
+        i++;
+    }
+    return res;
+}
+
+imagen erosionar(const imagen &A, const imagen &B){
+    imagen E = A;
+    for(int i=0; i<A.size(); i++){
+        for(int j= 0; j<A[0].size(); j++){
+            if(!esPixelDeErosion(A,B,{i,j})){
+                E[i][j] = 0;
+            }
+        }
+    }
+    return E;
+}
