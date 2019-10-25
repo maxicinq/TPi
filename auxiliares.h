@@ -19,3 +19,5 @@ float calcularPromedioDeAreas(const imagen &A, const int k);
 
 bool esPixelContorno(const pixel &p, const imagen &A, const int &k);
 
+void closing(imagen &A, const imagen &B);
+

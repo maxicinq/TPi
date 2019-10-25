@@ -229,5 +229,62 @@ bool estaEnBorde(const pixel &p, const imagen &A, const int &k){
 }
 
 bool esPixelContorno(const pixel &p, const imagen &A, const int &k){
-    return (tocaConBackground(p,A,k) || estaEnBorde(p,A,k));
+    return (tocaConBackground(p, A, k) || estaEnBorde(p, A, k));
 }
+
+vector<vector<int>> obtenerPosicionesDelElementoEstructurante(const imagen &B){
+    vector<vector<int>> result = {};
+    pixel actual = {};
+    int centro = (B.size() - 1)/2;
+    for (int i = 0; i < B.size(); i++) {
+        for (int j = 0; j < B[0].size(); j++){
+            actual = {i, j};
+            if (pixelValidoEncendido(actual, B)){
+                result.push_back({i - centro, j - centro});
+            }
+        }
+    }
+    return result;
+}
+
+imagen dilatar(const imagen &A, const imagen &B){
+    vector<vector<int>> des = obtenerPosicionesDelElementoEstructurante(B);
+    imagen E = A;
+
+    for (int i = 0; i < A.size(); i++) {
+        for (int j = 0; j < A[0].size(); j++) {
+            for (int k = 0; k < des.size(); k++) {
+                if (pixelValidoEncendido({i + des[k][0], j + des[k][1]}, A)){
+                    E[i][j] = 1;
+                }
+            }
+        }
+    }
+    return E;
+}
+
+imagen erosionar(const imagen &A, const imagen &B){
+    vector<vector<int>> des = obtenerPosicionesDelElementoEstructurante(B);
+    imagen E = A;
+    bool pixAct = true;
+
+    for (int i = 0; i < A.size(); i++) {
+        for (int j = 0; j < A[0].size(); j++) {
+            for (int k = 0; k < des.size(); k++) {
+                if (pixelEnRango({i + des[k][0], j + des[k][1]}, A) && !pixelValidoEncendido({i + des[k][0], j + des[k][1]}, A)){
+                    pixAct = false;
+                }
+            }
+            if (!pixAct){
+                E[i][j] = 0;
+            }
+            pixAct = true;
+        }
+    }
+    return E;
+}
+
+void closing( imagen &A, const imagen &B){
+    A = erosionar(dilatar(A, B),B);
+}
+
