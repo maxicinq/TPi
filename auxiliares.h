@@ -23,3 +23,4 @@ imagen dilatar(const imagen &A, const imagen &B);
 
 imagen erosionar(const imagen &A, const imagen &B);
 
+imagen intersecar(const imagen &A, const imagen &B);

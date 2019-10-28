@@ -236,14 +236,15 @@ sqPixel estructuranteCentradoEn(const imagen &A, const imagen &B, pixel p){
     vector<pixel> opciones;
     for(int i=0; i<A.size(); i++){
         for(int j=0; j<A[0].size(); j++){
-            if(p[0]-(B.size()-1)/2 <= i && i <= p[0]+(B.size()-1)/2 && p[1]-(B.size()-1)/2 <= j && j <= p[1]+(B.size()-1)/2){
+            int n = (B.size()-1)/2;
+            if((p[0]-n<=i)&&(i<=p[0]+n)&&(p[1]-n<=j)&&(j<=p[1]+n)){
                 opciones.push_back({i,j});
             }
         }
     }
     sqPixel res;
-    int n = opciones[0][0];
-    int m = opciones[0][1];
+    int n = p[0]-1;
+    int m = p[1]-1;
     for(int k=0; k<opciones.size(); k++){
         if(activado({opciones[k][0]-n,opciones[k][1]-m},B)){
             res.push_back(opciones[k]);
@@ -300,4 +301,16 @@ imagen erosionar(const imagen &A, const imagen &B){
         }
     }
     return E;
+}
+
+imagen intersecar(const imagen &A, const imagen &B){
+    imagen I(A.size(),vector<int>(A[0].size()));
+    for(int i=0; i<A.size(); i++){
+        for(int j=0; j<A[0].size(); j++){
+            if(activado({i,j},A) && activado({i,j},B)){
+                I[i][j]=1;
+            }
+        }
+    }
+    return I;
 }

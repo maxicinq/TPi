@@ -93,3 +93,4 @@ TEST(obtenerRegionConectadaTest, imagenEjemploPrueboQIteraciones) {
 
     EXPECT_EQ(7, iteraciones);
 }
+

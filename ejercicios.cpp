@@ -52,9 +52,19 @@ void cerrarForma(imagen &A, const imagen &B){
 // Ejercicio 6
 
 int obtenerRegionConectada(imagen &A, const pixel &semilla) {
-	int ite = 0;
-	// TODO --> cuerpo de funcion
-	return ite;
+	vector<imagen> R(2,imagen(A.size(),vector<int>(A[0].size())));
+	R[0]=A;
+	R[1][semilla[0]][semilla[1]]=1;
+	imagen B(3,vector<int>(3,1));
+	int iteraciones = 1;
+	int i = 1;
+	while(R[i]!=R[i-1]){
+	    R.push_back(intersecar(A,dilatar(R[i],B)));
+	    i++;
+	    iteraciones++;
+	}
+	A=R[i];
+	return iteraciones;
 }
 
 
