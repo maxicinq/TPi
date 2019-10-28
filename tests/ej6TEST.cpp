@@ -93,17 +93,3 @@ TEST(obtenerRegionConectadaTest, imagenEjemploPrueboQIteraciones) {
 
     EXPECT_EQ(6, iteraciones);
 }
-
-TEST(obtenerRegionConectadaTest, hola){
-    imagen img = {
-            {1,0,0,0,0,0},
-            {0,0,0,1,1,1},
-            {0,0,0,1,1,1},
-            {0,0,0,1,1,1}
-    };
-
-    pixel semilla = {2,4};
-    int iteraciones = obtenerRegionConectada(img,semilla);
-
-    EXPECT_EQ(iteraciones,2);
-}
