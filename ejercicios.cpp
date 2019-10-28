@@ -64,6 +64,9 @@ int obtenerRegionConectada(imagen &A, const pixel &semilla) {
 	    iteraciones++;
 	}
 	A=R[i];
+	if(iteraciones!=1){
+	    iteraciones=iteraciones-1;
+	}
 	return iteraciones;
 }
 
