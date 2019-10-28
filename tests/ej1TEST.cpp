@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "../ejercicios.h"
+#include "../auxiliares.h"
 
 TEST(esImagenValidaTest, ImagenVaciaNoEsValida) {
     imagen img = {{}};

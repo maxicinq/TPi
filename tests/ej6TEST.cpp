@@ -37,7 +37,7 @@ TEST(obtenerRegionConectadaTest, imagenActivadaSoloSemillaPueboQIteraciones) {
 
     iteraciones = obtenerRegionConectada(img, semilla);
 
-    EXPECT_EQ(iteraciones, 1);	
+    EXPECT_EQ(iteraciones, 1);
 }
 
 TEST(obtenerRegionConectadaTest, imagenEjemploPrueboMat) {
@@ -91,5 +91,5 @@ TEST(obtenerRegionConectadaTest, imagenEjemploPrueboQIteraciones) {
 
     iteraciones = obtenerRegionConectada(img, semilla);
 
-    EXPECT_EQ(7, iteraciones);
+    EXPECT_EQ(6, iteraciones);
 }
