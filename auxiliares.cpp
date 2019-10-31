@@ -288,3 +288,44 @@ void closing( imagen &A, const imagen &B){
     A = erosionar(dilatar(A, B),B);
 }
 
+int obtenerRegionContando(imagen &A, const pixel &p, const int &k){
+    sqPixel obtenidos = {};
+    if (pixelValidoEncendido(p,A)){
+        obtenidos = {p};
+    }
+    sqPixel obtenidosAnt = {};
+    sqPixel adyacentes = {};
+    sqPixel tmp = {};
+    sqPixel tmpAnt = {p};
+    int ite = 0;
+
+    while (obtenidos != obtenidosAnt){
+        for (int i = 0; i < tmpAnt.size(); i++) {
+            adyacentes = obtenerAdyacentes(tmpAnt[i], A, k);
+            for (int j = 0; j < adyacentes.size(); j++) {
+                if (pixelValidoEncendido(adyacentes[j], A)
+                    && !pertenece(adyacentes[j], obtenidos) && !pertenece(adyacentes[j], tmp)){
+                    tmp.push_back(adyacentes[j]);
+                }
+            }
+        }
+        obtenidosAnt = obtenidos;
+        for (int l = 0; l < tmp.size(); l++) {
+            obtenidos.push_back(tmp[l]);
+        }
+        tmpAnt = tmp;
+        tmp.clear();
+        ite++;
+    }
+
+    for (int i = 0; i < A.size(); i++) {
+        for (int j = 0; j < A[0].size(); j++) {
+            if (pertenece({i,j},obtenidos)){
+                A[i][j] = 1;
+            } else {
+                A[i][j] = 0;
+            }
+        }
+    }
+    return ite;
+}

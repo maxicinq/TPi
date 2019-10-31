@@ -21,3 +21,5 @@ bool esPixelContorno(const pixel &p, const imagen &A, const int &k);
 
 void closing(imagen &A, const imagen &B);
 
+int obtenerRegionContando(imagen &A, const pixel &p, const int &k);
+
